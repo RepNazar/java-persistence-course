@@ -22,24 +22,33 @@ should have a column that stores primary key from a parent table, which is a for
 
 */
 
-CREATE TABLE IF NOT EXISTS users
+CREATE TABLE users
 (
-    id         BIGINT,
-    first_name VARCHAR(255) NOT NULL,
-    last_name  VARCHAR(255) NOT NULL,
-    email      VARCHAR(255) NOT NULL,
-    birthday   DATE         NOT NULL,
-    CONSTRAINT users_PK PRIMARY KEY (id),
-    CONSTRAINT users_email_AK UNIQUE (email)
+    id         BIGINT       not null,
+    first_name VARCHAR(255) not null,
+    last_name  VARCHAR(255) not null,
+    birthday   DATE         not null,
+    email      VARCHAR(255) not null
 );
 
-CREATE TABLE IF NOT EXISTS profiles
+CREATE TABLE profiles
 (
-    user_id      BIGINT,
+    user_id      BIGINT not null,
     city         VARCHAR(255),
     job_position VARCHAR(255),
     company      VARCHAR(255),
-    education    VARCHAR(255),
-    CONSTRAINT profiles_PK PRIMARY KEY (user_id),
-    CONSTRAINT profiles_users_FK FOREIGN KEY (user_id) REFERENCES users
+    education    VARCHAR(255)
 );
+
+ALTER TABLE users
+    ADD CONSTRAINT "users_PK" PRIMARY KEY (id);
+ALTER TABLE profiles
+    ADD CONSTRAINT "profiles_PK" PRIMARY KEY (user_id);
+ALTER TABLE users
+    ADD CONSTRAINT "users_email_AK" unique (email);
+
+ALTER TABLE users
+    ADD CONSTRAINT "users_profiles_FK" FOREIGN KEY (id) references profiles (user_id);
+
+ALTER TABLE profiles
+    ADD CONSTRAINT "profiles_users_FK" FOREIGN KEY (user_id) references users (id);

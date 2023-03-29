@@ -1,10 +1,9 @@
 package com.bobocode.model;
 
 import com.bobocode.util.ExerciseNotCompletedException;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,34 +22,19 @@ import java.util.List;
  * - enable cascade type {@link javax.persistence.CascadeType#ALL} for field {@link Photo#comments}
  * - enable orphan removal
  */
-@NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
-@Entity
-@Table(name = "photo")
 public class Photo {
-    @Id
-    @GeneratedValue
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String url;
-
-    @Column(nullable = false)
     private String description;
-
-    @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PhotoComment> comments = new ArrayList<>();
+    private List<PhotoComment> comments;
 
     public void addComment(PhotoComment comment) {
-        comments.add(comment);
-        comment.setPhoto(this);
+        throw new ExerciseNotCompletedException();
     }
 
     public void removeComment(PhotoComment comment) {
-        comments.remove(comment);
-        comment.setPhoto(null);
+        throw new ExerciseNotCompletedException();
     }
 }

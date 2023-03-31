@@ -1,12 +1,13 @@
 package com.bobocode.model;
 
-import com.bobocode.util.ExerciseNotCompletedException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * todo:
@@ -26,16 +27,43 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name = "company")
 public class Company {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "company")
     private List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        throw new ExerciseNotCompletedException();
+        products.add(product);
+        product.setCompany(this);
     }
 
     public void removeProduct(Product product) {
-        throw new ExerciseNotCompletedException();
+        products.remove(product);
+        product.setCompany(null);
+    }
+
+    private void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return id.equals(company.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

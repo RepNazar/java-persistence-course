@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 /**
  * todo:
  * - configure JPA entity
@@ -18,8 +20,28 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name = "product")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false)
+
     private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
     private Company company;
+
+    @Override
+    public boolean equals(Object obj) {
+        Product product = (Product) obj;
+        return this.id.equals(product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 }
